@@ -12,7 +12,7 @@ from collections import deque
 
 from ReplayBuffer import ReplayBuffer
 from Experience import Experience
-from Utils import Utils, FileLogger, AverageRewardTracker
+from Utils import FileLogger, AverageRewardTracker, plot, backup_model
 from DDQN import DDQN
 
 env = gym.make("LunarLander-v2")
@@ -21,7 +21,7 @@ state_space = env.observation_space.shape[0] #states
 action_space = env.action_space.n # actions
 learning_rate = 0.001
 gamma = 0.99
-epsilon = 1.0
+epsilon = 0.5
 min_epsilon = 0.01
 decay_rate = 0.995 # per episode
 buffer_maxlen = 200000
@@ -30,8 +30,8 @@ reg_factor = 0.001
 batch_size = 128
 training_start = 256 # which step to start training
 target_update_freq = 1000
-max_episodes = 1000
-max_steps = 1000
+max_episodes = 20
+max_steps = 20
 train_freq = 4
 backup_freq = 100
 
@@ -83,8 +83,8 @@ for episode in range(max_episodes): # training loop
   print(f"Average reward over last 100: {average} \n")
   file_logger.log(episode, step, total_reward, average)
   if episode != 0 and episode % backup_freq == 0: # back up model every x steps 
-    Utils.backup_model(agent.model, episode)
+    backup_model(agent.model, episode)
   
   agent.epsilon_decay()
 
-Utils.plot_reward(file_logger)
+plot(file_logger)

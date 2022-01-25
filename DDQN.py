@@ -24,6 +24,8 @@ class DDQN():
     self.target_model = self.build_model()
 
   def load_from_weights(self, weights_path):
+    del self.model
+    del self.target_model
     self.model = load_model(weights_path)
     self.target_model = load_model(weights_path)  
 
