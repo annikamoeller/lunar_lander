@@ -12,7 +12,7 @@ from collections import deque
 
 from ReplayBuffer import ReplayBuffer
 from Experience import Experience
-from Utils import Logger, AverageRewardTracker, backup_model, plot, train_loop, render_game
+from Utils import Logger, AverageRewardTracker, backup_model, plot, render_game
 from DDQN import DDQN
 
 env = gym.make("LunarLander-v2")
