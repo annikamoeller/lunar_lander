@@ -62,7 +62,9 @@ def render_game(model_filename):
 
   def get_q_values(model, state):
       state = np.array(state)
-      return model.predict(input)[0]
+      state = np.reshape(state, [1, 8])
+      print(state)
+      return model.predict(state)
 
   def select_best_action(q_values):
       return np.argmax(q_values)

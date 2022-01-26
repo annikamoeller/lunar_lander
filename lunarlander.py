@@ -21,7 +21,7 @@ state_space = env.observation_space.shape[0] #states
 action_space = env.action_space.n # actions
 learning_rate = 0.001
 gamma = 0.99
-epsilon = 0.5
+epsilon = 0.95
 min_epsilon = 0.01
 decay_rate = 0.995 # per episode
 buffer_maxlen = 200000
@@ -30,11 +30,12 @@ reg_factor = 0.001
 batch_size = 128
 training_start = 256 # which step to start training
 target_update_freq = 1000
-max_episodes = 20
-max_steps = 20
+max_episodes = 1000
+max_steps = 500
 train_freq = 4
 backup_freq = 100
-
+step_counter = 0
+# render_game('model_200.h5')
 agent = DDQN(state_space, action_space, learning_rate, 
   gamma, epsilon, min_epsilon, decay_rate, buffer_maxlen, reg_factor)
 
@@ -49,7 +50,8 @@ for episode in range(max_episodes): # training loop
 
   episode_reward = 0 # reward tracker
 
-  for step in range(max_steps): # limit number of steps
+  for step in range(max_steps): # limit number of step
+    step_counter += 1
     action = agent.select_action(state) # get action 
     next_state, reward, done, info = env.step(action) # next step
     episode_reward += reward # increment reward
@@ -63,8 +65,8 @@ for episode in range(max_episodes): # training loop
 
     state = next_state # update state
 
-    if step % target_update_freq == 0: # update target weights every x steps 
-      print("Updating target model")
+    if step_counter % target_update_freq == 0: # update target weights every x steps 
+      print("Updating target model step: ", step)
       agent.update_target_weights()
     
     if (agent.buffer.length() >= training_start) & (step % train_freq == 0): # train agent every x steps
