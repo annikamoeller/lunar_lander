@@ -12,7 +12,7 @@ from collections import deque
 
 from ReplayBuffer import ReplayBuffer
 from Experience import Experience
-from Utils import Logger, AverageRewardTracker, backup_model, plot, render_game
+from Utils import Logger, AverageRewardTracker, backup_model, plot
 from DDQN import DDQN
 
 env = gym.make("LunarLander-v2")
@@ -35,12 +35,9 @@ max_steps = 500
 train_freq = 4
 backup_freq = 100
 step_counter = 0
-# render_game('model_200.h5')
+
 agent = DDQN(state_space, action_space, learning_rate, 
   gamma, epsilon, min_epsilon, decay_rate, buffer_maxlen, reg_factor)
-
-
-# agent.load_from_weights('model_200.h5')
 
 avg_reward_tracker = AverageRewardTracker(100) 
 logger = Logger()
