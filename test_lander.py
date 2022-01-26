@@ -6,8 +6,8 @@ def test_lander(model_filename, render=False):
   env = gym.make("LunarLander-v2")
   trained_model = load_model(model_filename)
 
-  evaluation_max_episodes = 10
-  evaluation_max_steps = 1000
+  evaluation_max_episodes = 100
+  evaluation_max_steps = 500
 
   def get_q_values(model, state):
       state = np.array(state)
