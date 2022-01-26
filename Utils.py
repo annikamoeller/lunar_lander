@@ -95,4 +95,4 @@ def render_game(model_filename):
       rewards.append(episode_reward)
 
   print(rewards)
-  print("Average reward: " + np.average(rewards))
+  print("Average reward: ", np.average(rewards))
