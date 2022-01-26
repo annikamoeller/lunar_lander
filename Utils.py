@@ -74,7 +74,7 @@ def render_game(model_filename):
 
       episode_reward = 0
 
-      for step in range(evaluation_max_steps):
+      for step in range(1, evaluation_max_steps+1):
           env.render()
           q_values = get_q_values(trained_model, state)
           action = select_best_action(q_values)
