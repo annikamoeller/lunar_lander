@@ -63,7 +63,7 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
 def test_lander(model_filename, max_episodes, max_steps, render=False):
   env = gym.make("LunarLander-v2")
   trained_model = load_model(model_filename)
-  
+
   def get_q_values(model, state):
       state = np.array(state)
       state = np.reshape(state, [1, 8])
@@ -100,5 +100,4 @@ def test_lander(model_filename, max_episodes, max_steps, render=False):
       print(f"episode {episode} finished in {step} steps with reward {episode_reward}.")
       rewards.append(episode_reward)
 
-  print(rewards)
   print("Average reward: ", np.average(rewards))
