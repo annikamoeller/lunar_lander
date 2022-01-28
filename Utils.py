@@ -5,17 +5,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 class Logger():
-
-  def __init__(self, file_name='metrics/training_progress1.log'):
+  def __init__(self, file_name='metrics/training_progress.log'):
     self.file_name = file_name
-    self.clean_progress_file()
+    self.reset_progress_file()
 
   def log(self, episode, steps, reward, average_reward):
     f = open(self.file_name, 'a')
     f.write(f"{episode};{steps};{reward};{average_reward}\n")
     f.close()
 
-  def clean_progress_file(self):
+  def reset_progress_file(self):
     if os.path.exists(self.file_name):
       os.remove(self.file_name)
     f = open(self.file_name, 'a')
