@@ -3,6 +3,8 @@ from DDQN import DDQN
 import argparse
 import gym
 
+print("For help run this program with flag -h \n")
+
 # parse command line arguments
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('--run_type', type=str, required=True, help = 'Type "test" or "train"')
@@ -40,7 +42,6 @@ agent = DDQN(state_space, action_space, learning_rate,
     gamma, epsilon, min_epsilon, decay_rate, buffer_maxlen, reg_factor)
 
 if run_type == "train":
-
     train_lander(agent, env, batch_size, training_start, 
         target_update_freq, max_episodes, max_steps, train_freq, backup_freq)
 

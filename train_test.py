@@ -14,11 +14,11 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
   logger = Logger()
 
   for episode in range(max_episodes): # training loop
-    state = env.reset() # vector of 8
+    state = env.reset() 
 
     episode_reward = 0 # reward tracker
 
-    for step in range(max_steps): # limit number of step
+    for step in range(max_steps): # limit number of steps
       step_counter += 1
       action = agent.select_action(state) # get action 
       next_state, reward, done, info = env.step(action) # next step
@@ -37,7 +37,7 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
         print("Updating target model step: ", step)
         agent.update_target_weights()
       
-      if (agent.buffer.length() >= training_start) & (step % train_freq == 0): # train agent every x steps
+      if (agent.buffer.length() >= training_start) & (step % train_freq == 0): # train agent every y steps
         batch = agent.buffer.sample(batch_size)
         inputs, targets = agent.calculate_inputs_and_targets(batch)
         agent.train(inputs, targets)
@@ -51,8 +51,8 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
     print(f"EPISODE {episode} finished in {step} steps, " )
     print(f"epsilon {agent.epsilon}, reward {episode_reward}. ")
     print(f"Average reward over last 100: {average} \n")
-    logger.log(episode, step, episode_reward, average)
-    if episode != 0 and episode % backup_freq == 0: # back up model every x steps 
+    logger.loyg(episode, step, episode_reward, average)
+    if episode != 0 and episode % backup_freq == 0: # back up model every z steps 
       backup_model(agent.model, episode)
     
     agent.epsilon_decay()
