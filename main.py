@@ -1,5 +1,4 @@
 from train_test import train_lander, test_lander
-from params import agent_params, train_params, test_params
 from DDQN import DDQN
 import argparse
 import gym
