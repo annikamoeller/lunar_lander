@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 class Logger():
 
-  def __init__(self, file_name='training_progress.log'):
+  def __init__(self, file_name='metrics/training_progress.log'):
     self.file_name = file_name
     self.clean_progress_file()
 
@@ -36,7 +36,7 @@ class AverageRewardTracker():
     return np.average(self.tracker)
 
 def backup_model(model, episode):
-    backup_file = f"model_{episode}.h5"
+    backup_file = f"checkpoints/model_{episode}.h5"
     print(f"Backing up model to {backup_file}")
     model.save(backup_file)
 
@@ -49,5 +49,5 @@ def plot(logger):
     plt.xlabel('Episode')
     plt.ylabel('Reward')
     plt.legend(['Average reward', 'Reward'], loc='upper right')
-    plt.savefig('reward_plot.png')
+    plt.savefig('metrics/reward_plot.png')
 

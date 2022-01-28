@@ -90,7 +90,6 @@ class DDQN():
       
       target_vector = q_values_states[index]
       target_vector[experience.action] = target_val
-      #print(f"target vector {target_vector}")
       targets.append(target_vector)
     return inputs, targets
 
