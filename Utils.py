@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 class Logger():
 
-  def __init__(self, file_name='metrics/training_progress.log'):
+  def __init__(self, file_name='metrics/training_progress1.log'):
     self.file_name = file_name
     self.clean_progress_file()
 
