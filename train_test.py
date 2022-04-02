@@ -1,14 +1,15 @@
 import gym
 from Experience import Experience
 from Utils import Logger, AverageRewardTracker, backup_model, plot
-from DDQN import DDQN
+from DQN import DQN
 import numpy as np
 from tensorflow.keras.models import load_model
 
 # training function
 def train_lander(agent, env, batch_size, training_start, target_update_freq, 
   max_episodes, max_steps, train_freq, backup_freq):
-  
+  is_ddqn = agent.double
+
   step_counter = 0
   avg_reward_tracker = AverageRewardTracker(100) 
   logger = Logger()
@@ -33,13 +34,17 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
 
       state = next_state # update state
 
-      if step_counter % target_update_freq == 0: # update target weights every x steps 
-        print("Updating target model step: ", step)
-        agent.update_target_weights()
-      
+      if is_ddqn:
+        if step_counter % target_update_freq == 0: # update target weights every x steps 
+          print("Updating target model step: ", step)
+          agent.update_target_weights()
+        
       if (agent.buffer.length() >= training_start) & (step % train_freq == 0): # train agent every y steps
         batch = agent.buffer.sample(batch_size)
-        inputs, targets = agent.calculate_inputs_and_targets(batch)
+        if is_ddqn:
+          inputs, targets = agent.calculate_inputs_and_targets_ddqn(batch)
+        else:
+          inputs, targets = agent.calculate_inputs_and_targets_dqn(batch)
         agent.train(inputs, targets)
 
       if done: # stop if this action results in goal reached
@@ -51,7 +56,7 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
     print(f"EPISODE {episode} finished in {step} steps, " )
     print(f"epsilon {agent.epsilon}, reward {episode_reward}. ")
     print(f"Average reward over last 100: {average} \n")
-    logger.loyg(episode, step, episode_reward, average)
+    logger.log(episode, step, episode_reward, average)
     if episode != 0 and episode % backup_freq == 0: # back up model every z steps 
       backup_model(agent.model, episode)
     
