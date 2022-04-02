@@ -1,5 +1,5 @@
 from train_test import train_lander, test_lander
-from DDQN import DDQN
+from DQN import DQN
 import argparse
 import gym
 
@@ -21,7 +21,7 @@ epsilon = 0.95
 min_epsilon = 0.01
 decay_rate = 0.995 # per episode
 buffer_maxlen = 200000
-reg_factor = 0.001
+#reg_factor = 0.001
 
 # training params
 batch_size = 128
@@ -38,11 +38,14 @@ test_max_episodes = 10
 test_max_steps = 500
 render_lander = False
 
-agent = DDQN(state_space, action_space, learning_rate, 
-    gamma, epsilon, min_epsilon, decay_rate, buffer_maxlen, reg_factor)
+ddqn_agent = DQN(state_space, action_space, learning_rate, 
+    gamma, epsilon, min_epsilon, decay_rate, buffer_maxlen, double=True)
 
+dqn_agent = DQN(state_space, action_space, learning_rate, 
+    gamma, epsilon, min_epsilon, decay_rate, buffer_maxlen, double=False)
+    
 if run_type == "train":
-    train_lander(agent, env, batch_size, training_start, 
+    train_lander(dqn_agent, env, batch_size, training_start, 
         target_update_freq, max_episodes, max_steps, train_freq, backup_freq)
 
 if run_type == "test":
