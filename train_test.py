@@ -8,11 +8,11 @@ from tensorflow.keras.models import load_model
 # training function
 def train_lander(agent, env, batch_size, training_start, target_update_freq, 
   max_episodes, max_steps, train_freq, backup_freq):
-  is_ddqn = agent.double
+  network_type = agent.network_type
 
   step_counter = 0
   avg_reward_tracker = AverageRewardTracker(100) 
-  logger = Logger()
+  logger = Logger(network_type)
 
   for episode in range(max_episodes): # training loop
     state = env.reset() 
@@ -34,14 +34,15 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
 
       state = next_state # update state
 
-      if is_ddqn:
+      if network_type is "ddqn":
         if step_counter % target_update_freq == 0: # update target weights every x steps 
           print("Updating target model step: ", step)
           agent.update_target_weights()
         
       if (agent.buffer.length() >= training_start) & (step % train_freq == 0): # train agent every y steps
         batch = agent.buffer.sample(batch_size)
-        if is_ddqn:
+
+        if network_type is "ddqn":
           inputs, targets = agent.calculate_inputs_and_targets_ddqn(batch)
         else:
           inputs, targets = agent.calculate_inputs_and_targets_dqn(batch)
@@ -58,11 +59,11 @@ def train_lander(agent, env, batch_size, training_start, target_update_freq,
     print(f"Average reward over last 100: {average} \n")
     logger.log(episode, step, episode_reward, average)
     if episode != 0 and episode % backup_freq == 0: # back up model every z steps 
-      backup_model(agent.model, episode)
+      backup_model(agent.model, episode, network_type)
     
     agent.epsilon_decay()
 
-  plot(logger)
+  plot(logger, network_type)
 
 # testing function
 def test_lander(model_filename, max_episodes, max_steps, render=False):

@@ -10,7 +10,7 @@ import random
 
 class DQN():
   def __init__(self, state_space, action_space, learning_rate, gamma, epsilon, min_epsilon, decay_rate, 
-  replay_buffer_maxlen, double):
+  replay_buffer_maxlen, network_type):
     self.state_space = state_space
     self.action_space = action_space
     self.buffer = ReplayBuffer(replay_buffer_maxlen)
@@ -21,7 +21,7 @@ class DQN():
     self.decay_rate = decay_rate
     self.model = self.build_model()
     self.target_model = self.build_model()
-    self.double = double
+    self.network_type = network_type
 
   def load_from_weights(self, weights_path):
     del self.model

@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 class Logger():
-  def __init__(self, file_name='metrics/training_progress.log'):
-    self.file_name = file_name
+  def __init__(self, network_type):
+    self.file_name = f'metrics_{network_type}/training_progress.log'
     self.reset_progress_file()
 
   def log(self, episode, steps, reward, average_reward):
@@ -34,19 +34,20 @@ class AverageRewardTracker():
   def get_average(self):
     return np.average(self.tracker)
 
-def backup_model(model, episode):
-    backup_file = f"checkpoints/model_{episode}.h5"
+def backup_model(model, episode, network_type):
+    backup_file = f"checkpoints_{network_type}/model_{episode}.h5"
     print(f"Backing up model to {backup_file}")
     model.save(backup_file)
 
-def plot(logger):
-    data = pd.read_csv(logger.file_name, sep=';')
-    plt.figure(figsize=(20,10))
-    plt.plot(data['average'])
-    plt.plot(data['reward'])
-    plt.title('Reward')
-    plt.xlabel('Episode')
-    plt.ylabel('Reward')
-    plt.legend(['Average reward', 'Reward'], loc='upper right')
-    plt.savefig('metrics/reward_plot.png')
-
+def plot(logger, network_type):
+  data = pd.read_csv(logger.file_name, sep=';')
+  plt.figure(figsize=(11,10))
+  plt.plot(data['average'])
+  plt.plot(data['reward'])
+  plt.title('Reward per training episode', fontsize=22)
+  plt.xlabel('Episode', fontsize=18)
+  plt.ylabel('Reward', fontsize=18)
+  plt.xticks(fontsize=18)
+  plt.yticks(fontsize=18)
+  plt.legend(['Average reward', 'Reward'], loc='upper left', fontsize=18)
+  plt.savefig(f'metrics_{network_type}/reward_plot.png')
